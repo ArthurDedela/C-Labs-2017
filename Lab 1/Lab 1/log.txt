@@ -1,1 +1,16 @@
-ECHO is on.
+21:36:10 -  Program starts...
+21:36:10 -  Caching help pages.
+21:36:10 -  Help pages has cached
+21:36:10 -  Received flags:
+/i
+21:36:10 -  All flags have handled.
+21:36:10 -  Starting initialization from file...
+21:36:10 -  User changed input file name.
+21:36:10 -  User changed output file name.
+21:36:10 -  User changed key file name.
+21:36:10 -  Initialization success.
+21:36:10 -  Executing flags
+21:36:13 -  Flags had executed
+21:36:13 -  User entered the menu.
+21:38:03 -  User exited from menu.
+21:38:03 -  Program successfully finished.

@@ -1,0 +1,9 @@
+		About RC4
+
+RC4 generates a pseudorandom stream of bits (a keystream). As with any stream cipher, 
+these can be used for encryption by combining it with the plaintext using bit-wise exclusive-or; 
+decryption is performed the same way (since exclusive-or with given data is an involution). 
+(This is similar to the Vernam cipher except that generated pseudorandom bits, rather than a prepared stream, are used.) To generate the keystream, the cipher makes use of a secret internal state which consists of two parts:
+1) A permutation of all 256 possible bytes.
+2) Two 8 - bit index - pointers.
+The permutation is initialized with a variable length key, typically between 40 and 2048 bits, using the key - scheduling algorithm(KSA).Once this has been completed, the stream of bits is generated using the pseudo - random generation algorithm(PRGA).

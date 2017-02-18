@@ -1,0 +1,5 @@
+		Navigation
+
+To navigate in help use <PgUp> and <PgDn> or <Esc> to exit.
+To navigate in menu use arrows, to select item press <Enter>.
+To exit from menu press <Esc>

@@ -1,0 +1,11 @@
+		Command Arguments
+
+/s - shows student information.
+/e - shows email.
+/m - shows menu
+/h - shows help
+/i - uses the initialization file
+/c - uses RC4
+/fini fileName - reassign initializing file
+/fin fileName - reassign input file
+/fout fileName - reassign ouput file
