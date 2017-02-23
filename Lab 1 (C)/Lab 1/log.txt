@@ -1,0 +1,10 @@
+13:45:33 -  Program starts...
+13:45:33 -  Caching help pages.
+13:45:33 -  Help pages cached
+13:45:33 -  Received flags:
+/m
+13:45:33 -  All flags have handled.
+13:45:33 -  Executing flags
+13:45:33 -  Flags had executed
+13:45:33 -  User entered the menu.
+13:45:35 -  User exited program from menu.
