@@ -103,10 +103,15 @@ void cramerMethod(lineCoefs coefs, lineCoefs coefs_2, point &crosspoint);
 void getLineInfo(string &str, lineinfo &line);
 
 void distanceToPoint(string&);
+void findSimmetric(string&);
 
-void(*algebra[2][5])(string&) = { 
+void findSegmentMid(string&);
+void findVectorCos(string&);
+
+void(*algebra[3][5])(string&) = { 
   { scalarProd, vectorProd, mixedProd, vectorArithmetics, vectorModule }, 
-  { createLines, findCrosspoint, distanceToPoint } 
+  { createLines, findCrosspoint, distanceToPoint, findSimmetric },
+  { findSegmentMid, findVectorCos }
 };
 
 
@@ -285,17 +290,22 @@ void interpret() {
   fout.close();
   ifstream fIn(files.input);
   string buf;
-  int topic, task;
+  int topic, task, commentStart;
+
   if (fIn.is_open()) {
     log("Начата интерпретация входного файла " + files.input);
+
     while (!fIn.eof()) {
       getline(fIn, buf);
       if ((buf.length() < 5) || (buf.front() != '№')) continue;
+      commentStart = buf.find("//");
+      if (commentStart != -1) buf.erase(commentStart);
       topic = buf[1] - '0' - 1;
       task = buf[3] - '0' - 1;
       eraseSpaces(buf.erase(0, 4));
       algebra[topic][task](buf);
     }
+
     fIn.close();
     writeOut(" ", " ", 1);
     cout << "Все задания выполнены." << endl;
@@ -629,6 +639,65 @@ void distanceToPoint(string &str)
   writeOut(message, to_string(distance));
 }
 
+void findSimmetric(string &str)
+{
+  lineinfo line;
+  int point[2], lastPos = 0;
+
+  getLineInfo(str, line);
+  if (getCoordinates(str, lastPos, point) != 2) return;
+  double distance = abs(line.A * point[0] + line.B * point[1] + line.C) / sqrt(line.A*line.A + line.B*line.B);
+
+  point[0] += distance * 2;
+  point[1] += distance * 2;
+
+  string message = "№2.4 Найти симметричную точку относительно прямой. Прямая: " + line.equation + " Точка: " + str;
+  stringstream answer;
+  answer << "{" << point[0] << ", " << point[1] << "}";
+  writeOut(message, answer.str());
+}
+
+
+/***THEME 3 BLOCK***/
+void findSegmentMid(string &str)
+{
+  int points[2][3], lastPos = 0, dimension;
+  double mid[3];
+  dimension = getCoordinates(str, lastPos, points[0]);
+  if (dimension != getCoordinates(str, lastPos, points[1])) return;
+
+  for (int i = 0; i < dimension; i++) {
+    mid[i] = (points[0][i] + points[1][i]) / 2.;
+  }
+
+  string message = "№3.1 Вычисление координат середины отрезка. " + str;
+  stringstream answer;
+  answer << "{";
+  for (int i = 0; i < dimension; i++) {
+    answer << mid[i];
+    if (dimension - i > 1) answer << ", ";
+  }
+  answer << "}";
+  writeOut(message, answer.str());
+}
+
+void findVectorCos(string &str)
+{
+  int temp = 0, dimension, vector[3], lastPos = 0;
+  dimension = getCoordinates(str, lastPos, vector);
+  for (int i = 0; i < dimension; i++) {
+    temp += vector[i] * vector[i];
+  }
+  double module = sqrt(temp);
+
+  stringstream answer;
+  for (int i = 0; i < dimension; i++) {
+    answer << "cos " << char(i + 'a') << " = " << vector[i] / module;
+    if (dimension - i > 1) answer << ", ";
+  }
+  string message = "№3.2 Вычисление направляющих косинусов вектора. " + str;
+  writeOut(message, answer.str());
+}
 
 /***SERVICE FUNCTIONS***/
 void writeOut(string message, string res, int endFlag) 
