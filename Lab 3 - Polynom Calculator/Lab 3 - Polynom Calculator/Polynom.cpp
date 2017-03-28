@@ -1,48 +1,63 @@
 #include "Polynom.h"
 #include <new>
 #include <iostream>
+#include <string>
 #include <sstream>
 using namespace std;
 
 /***CONSTRUCTORS***/
-Polynom::Polynom(std::string sPolynom)
+Polynom::Polynom(string str)
 {
-  unsigned power = 0;
-  bool save = false;
+  string mon;
   int coef;
+  unsigned power;
+  int monom_end;
+  
 
-  while (1)
+  while (str.length())
   {
-    if (!save && (isdigit(sPolynom[0]) || (sPolynom[0] == '-') || (sPolynom[0] == '+'))) {
-      stringstream strStream(sPolynom);
+    monom_end = str.find_first_of("+-", 1);
 
-      strStream >> coef;
-      if (sPolynom[0] == '+') sPolynom.erase(0, 1);
-      sPolynom.erase(0, to_string(coef).length());
-
-      save = true;
+    if (monom_end == -1) {
+      mon.assign(str);
+      str.clear();
     }
-    else if (isalpha(sPolynom[0])) {
-      sPolynom.erase(0, 1);
-      power = 1;
+    else {
+      mon.assign(str, 0, monom_end);
+      if (str[monom_end] == '+') monom_end++;
+      str = str.substr(monom_end);
+    }
 
-      if (sPolynom[0] == '^') {
-        stringstream strStream(sPolynom);
+    if (mon[0] == '-') coef = -1;
+    else coef = 1;
+    power = 0;
+    
+    if (isdigit(mon[0]) || mon[0] == '-') {
+      stringstream sStream(mon);
+      sStream >> coef;
 
-        strStream.ignore(1);
-        strStream >> power;
+      mon.erase(0, mon.find('x'));
+    }
 
-        sPolynom.erase(0, 1 + to_string(power).length());
+    if (isalpha(mon[0])) {
+      int pow_start = mon.find("^");
+
+      if (pow_start == -1) {
+        power = 1;
+      }
+      else {
+        mon.erase(0, pow_start + 1);
+        stringstream sStream(mon);
+        sStream >> power;
       }
     }
-    else if ((sPolynom[0] == '-') || (sPolynom[0] == '+') || !sPolynom.length()) {
-      add(new Monom(coef, power));
-      power = 0;
-      if (!sPolynom.length()) break;
 
-      save = false;
-    }
+    Monom *current = new Monom(coef, power);
+    add(current);
+
+    delete current;
   }
+
   optimize();
 }
 
@@ -370,7 +385,7 @@ void Polynom::print()
   if (list) {
     for (Node* temp = list; temp != nullptr; temp = temp->get_next())
     {
-      cout.setf(ios::showpos);
+      if (temp != list) cout.setf(ios::showpos);
       int coef = temp->get_monom()->get_coef();
       unsigned pow = temp->get_monom()->get_pow();
 
@@ -385,6 +400,13 @@ void Polynom::print()
     }
     cout << endl;
   }
+  cout.unsetf(ios::showpos);
+}
+
+ostream & operator<<(ostream & os, Polynom & p)
+{
+  p.print();
+  return os;
 }
 
 

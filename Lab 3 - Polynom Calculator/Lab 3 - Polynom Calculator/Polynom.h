@@ -48,6 +48,8 @@ public:
 
   Polynom operator-();
 
+  friend std::ostream& operator<<(std::ostream& os, Polynom& p);
+
   void print();
 
   
