@@ -50,7 +50,8 @@ public:
 
   friend std::ostream& operator<<(std::ostream& os, Polynom& p);
 
-  void print();
+  bool is_zero();
+  void print(std::ostream& os);
 
   
   ~Polynom();

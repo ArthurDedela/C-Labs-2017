@@ -115,7 +115,16 @@ void Polynom::checkZeros()
 {
   for (Node* temp = list; temp != nullptr; temp = temp->get_next())
   {
-    if (!temp->get_monom()->get_coef()) temp = delNode(temp);
+    if (!temp->get_monom()->get_coef()) 
+    {
+      temp = delNode(temp);
+
+      if (temp == nullptr) {
+        Monom *zero = new Monom(0, 0);
+        add(zero);
+        break;
+      }
+    }
   }
 }
 
@@ -346,10 +355,11 @@ Polynom Polynom::operator-(const Polynom &pol)
 
 Polynom & Polynom::operator/=(const Polynom &pol)
 {
-  Polynom result, remainder;
+  Polynom result("0"), remainder;
   divide(pol, result, remainder);
   
   *this = result;
+  optimize();
   return *this;
 }
 
@@ -380,32 +390,37 @@ Polynom Polynom::operator%(const Polynom & pol)
 /***************/
 
 
-void Polynom::print()
+bool Polynom::is_zero()
+{
+  return !list->get_monom()->get_coef();
+}
+
+void Polynom::print(ostream& os)
 {
   if (list) {
     for (Node* temp = list; temp != nullptr; temp = temp->get_next())
     {
-      if (temp != list) cout.setf(ios::showpos);
+      if (temp != list) os.setf(ios::showpos);
       int coef = temp->get_monom()->get_coef();
       unsigned pow = temp->get_monom()->get_pow();
 
-      if ((coef == 1) && pow) cout << "+";
-      else if ((coef == -1) && pow) cout << "-";
-      else cout << coef;
+      if ((coef == 1) && pow) os << "+";
+      else if ((coef == -1) && pow) os << "-";
+      else os << coef;
 
       if (!pow) continue;
-      else if (pow) cout << "x";
+      else if (pow) os << "x";
 
-      if (pow > 1) cout << "^" << pow;
+      if (pow > 1) os << "^" << pow;
     }
-    cout << endl;
   }
-  cout.unsetf(ios::showpos);
+  else os << 0;
+  os.unsetf(ios::showpos);
 }
 
 ostream & operator<<(ostream & os, Polynom & p)
 {
-  p.print();
+  p.print(os);
   return os;
 }
 
